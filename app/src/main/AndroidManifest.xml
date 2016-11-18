@@ -23,13 +23,15 @@
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.HOME" />
             </intent-filter>
         </activity>
         <activity
             android:name=".lockAction.LockActivity"
             android:screenOrientation="portrait"
             android:launchMode="singleInstance"
-            android:theme="@style/LockViewAnim" />
+            android:theme="@style/LockViewAnim"
+            />
         <service android:name=".LockService" />
 
         <receiver android:name=".lockAction.BootReceiver">

@@ -3,86 +3,183 @@
 <head>
     <meta charset="utf-8" />
     <title>打地鼠</title>
-    <script type="text/javascript" src="js/main.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <script type="text/javascript" src="http://cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script>
+    <link  rel="stylesheet" type="text/css" href="http://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script type="text/javascript" src="http://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
     <style>
+    .container{
+        text-align: center;
+        background: url(./img/bg.png);
+        background-size: contain;
+        width: 100%;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+    }
+    #pic{
+        text-align: center;
+        background: url(./img/pic.png);
+        background-size: contain;
+        width: 100%;
+        height: 70%;
+        background-position-x: center;
+        background-repeat: no-repeat;
+        background-position-y: 10px;
+    }
+    #pic_b{
+        text-align: center;
+        background: url(./img/pic_b.png);
+        background-size: 75%;
+        background-repeat: no-repeat;
+        height: 90%;
+        position: relative;
+        background-position-x: center;
+        background-position-y: 80px;
+    }
+     #pic_b img{
+         max-width: 60%;
+         height:70%;
+         position: relative;
+         top:100px
+     }
+    #hole{
+        background: url(./img/hole.png);
+        background-size: 30%;
+        background-repeat: no-repeat;
+        background-position-x: center;
+        background-position-y: bottom;
+        width: 100%;
+        height: 100px;
+        position: absolute;
+        bottom: 0px;
+    }
     #mouse{
-        z-index: 100;
-        position:relative;
-        top:20px;
-        animation:mymove 5s infinite;
-        -webkit-animation:mymove 1s infinite; /*Safari and Chrome*/
+        width: 75px;
+        height: 75px;
+        position: relative;
+        top: -20px;
+        left: 3px;
+        z-index: 1;
+        animation:mymove 2s infinite;
+        -webkit-animation:mymove 1.5s infinite;
     }
+     @keyframes mymove{
+         from {top:-20px;}
+         to {top:-40px;}
+     }
 
-    @keyframes mymove{
-        from {top:0px;}
-        to {top:20px;}
+     @-webkit-keyframes mymove {
+         from {top:-20px;}
+         to {top:-40px;}
+     }
+    .option{
+        cursor: pointer;
     }
-
-    @-webkit-keyframes mymove /*Safari and Chrome*/
-    {
-        from {top:0px;}
-        to {top:20px;}
+    .option img{
+        height: 90px;
+        width: 90px;
+        z-index: 999;
+    }
+    .option strong{
+        display: block;
+        font-size: 20px;
+        font-family: MingLiU;
+        color: rgb(160, 21, 2)
     }
     .hammerRight{
         transform:scaleX(-1);
     }
     .hammerRightAf{
-        transform:scaleX(-1) translateY(40px) rotate(-60deg);
-        z-index:999
+        transform:scaleX(-1) translateY(20px) rotate(-60deg);
     }
     .hammerLeftAf{
-        transform:translateY(40px) rotate(-60deg);
-        z-index:999
-    }
-    #a{
-        position:relative;
-        left: 5px;
-    }
-    .container{
-        text-align: center;
+        transform:translateY(20px) rotate(-60deg);
     }
     </style>
 </head>
 <div class="container">
-    <div>
-        <!--<img src="./img/zjl.jpg" width="150" height="200"/>-->
-        <img src="./img/jxx.jpeg" width="200" height="300"/>
-    </div>
-    <div>
-        <div>
-            <span>是人</span>
-            <img class="hammerRight" id='hammerRight' src="./img/hammer.png"/>
-            <img class="hammer" id='hammerLeft' src="./img/hammer.png"/>
-            <span>是物</span>
-        </div>
-        <div id="a">
-            <img id='mouse' src="./img/mouseA.png" width="60" height="60"/>
-            <br/>
-            <img src="./img/hole.png" style=" z-index: 1;"/>
+    <div id="pic">
+        <div id="pic_b">
+            <img class="img-rounded" alt="Responsive image"/>
         </div>
     </div>
+    <div id="">
+            <div class="row">
+                <div id="optionL" class="col-xs-6 option text-right"style="padding-right: 35px;">
+                    <strong>是人</strong>
+                    <img class='hammerRight' src="./img/hammer.png"/>
+                </div>
+                <div id="optionR" class="col-xs-6 option text-left" style="padding-left: 30px;">
+                    <strong>是物</strong>
+                    <img src="./img/hammer.png"/>
+                </div>
+            </div>
+            <div class="row">
+                <div id="mouse_hole">
+                    <img id='mouse' src="./img/mouse.png"/>
+                    <div id="hole"></div>
+                </div>
+            </div>
+        </div>
 </div>
+
 <script>
-    var hammerRight = document.getElementById('hammerRight');
-    hammerRight.onclick = function (){
-        this.className = 'hammerRightAf';
-        document.getElementById('mouse').src ="./img/mouseB.png"
-        setTimeout(function(){
-            document.getElementById('hammerRight').className = 'hammerRight';
-            document.getElementById('mouse').src ="./img/mouseA.png"
-        },400)
-        NotificationBind.showNotification('This is an Awesome notification')
+    var picInfo = {};
+
+    $(function(){
+            $.ajax({
+                type: 'GET',
+                url:'http://10.106.165.252/fetch',
+                dataType:'jsonp',
+                data: '',
+                jsonp:'callback',
+                jsonpCallback:"jsonpCallback",
+                success:function(data){
+                    console.log(data);
+                    if(data.status==1){
+                        picInfo = data.data;
+                        showPic(picInfo);
+                    }else{
+                        console.log('error');
+                    }
+                },
+                error:function(data){
+                    console.log('error');
+                },
+            });
+    });
+
+    function showPic(obj){
+        $('#pic img')[0].src = obj.url;
+        $('#optionL strong').text(obj.option[0].name)
+        $('#optionR strong').text(obj.option[1].name)
+        $('#optionL')[0].dataset.key=obj.option[0].key;
+        $('#optionR')[0].dataset.key=obj.option[1].key;
     }
 
-    var hammerLeft = document.getElementById('hammerLeft');
-    hammerLeft.onclick = function (){
-        this.className = 'hammerLeftAf';
-        document.getElementById('mouse').src ="./img/mouseB.png"
-        setTimeout(function(){
-            document.getElementById('hammerLeft').className = 'hammerLeft';
-            document.getElementById('mouse').src ="./img/mouseA.png"
-        },400)
-    }
+   $('.option').on('click',function(){
+        var result = this.dataset.key;
+        var $that = $(this);
+        var style =  $that.find('img')[0].className;
+        if(style){
+            $that.find('img').addClass('hammerRightAf');
+        }else{
+            $that.find('img').addClass('hammerLeftAf');
+        }
+        $('#mouse')[0].src = "./img/mouse_die.png";
+       setTimeout(function(){
+           if(style){
+               $($that).find('img').removeClass('hammerRightAf');
+           }else{
+               $($that).find('img').removeClass('hammerLeftAf');
+           }
+           $('#mouse')[0].src = "./img/mouse.png";
+        NotificationBind.showNotification(picInfo.id,result)
+       },400)
+
+   });
 
 </script>
 </body>

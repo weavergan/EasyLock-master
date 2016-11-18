@@ -30,12 +30,16 @@ public class LockActivity extends BaseActivity implements SettingPresenter.Confi
 
     private static WebView webView = null;
 
+    private static final int FLAG_HOMEKEY_DISPATCHED = 0x80000000;
+
     // 声明一个Handler对象
-//    private static Handler handler = new Handler();
+    private static Handler handler = new Handler();
 
     @SuppressLint("SetJavaScriptEnabled")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        this.getWindow().setFlags(FLAG_HOMEKEY_DISPATCHED, FLAG_HOMEKEY_DISPATCHED);
+
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getWindow().setType(WindowManager.LayoutParams.TYPE_KEYGUARD_DIALOG);
@@ -98,8 +102,9 @@ public class LockActivity extends BaseActivity implements SettingPresenter.Confi
     //锁频页面屏蔽返回键
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
+
         int key = event.getKeyCode();
-        return key == KeyEvent.KEYCODE_BACK || super.onKeyDown(keyCode, event);
+        return key == KeyEvent.KEYCODE_BACK || key == KeyEvent.KEYCODE_HOME || super.onKeyDown(keyCode, event);
     }
 
     @Override
@@ -113,34 +118,33 @@ public class LockActivity extends BaseActivity implements SettingPresenter.Confi
     }
 
     private final class NotificationBindObject{
+
         @JavascriptInterface
-        public void showNotification(String message) {
-            System.out.println("########################");
-            System.out.println(message);
+        public void showNotification(String picId, String result) {
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    webView.reload();
+                }
+            });
+            System.out.println("########################" + picId + ":" + result);
+            int resultInt = 0;
+            if(result.trim().equalsIgnoreCase("yes")) {
+                resultInt = 1;
+            }
             // 获取deviceId
             TelephonyManager tm = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
             String deviceId = tm.getDeviceId();
 
-            System.out.println(RequestService.SendPost("1111", 1, deviceId));
-//            handler.post(new Runnable() {
-//                @Override
-//                public void run() {
-//                    LockActivity.this.finish();
-//                }
-//            });
+            System.out.println(RequestService.SendPost(picId, resultInt, deviceId));
+
             Intent intent = new Intent(Intent.ACTION_MAIN);
             intent.addCategory(Intent.CATEGORY_HOME);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
+
         }
 
-//        public void closeActivity() {
-//            mHandler.post(new Runnable() {
-//                public void run() {
-//                    //appView.loadUrl("javascript:wave()");
-//                    PhonegapFrame.this.finish();
-//                }
-//            });
-//        }
+
     }
 }

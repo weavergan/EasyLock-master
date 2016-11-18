@@ -15,7 +15,7 @@ import java.net.URLEncoder;
 
 public class RequestService {
 
-    public static String LOGIN_URL = "http://10.106.161.184/result";
+    public static String LOGIN_URL = "http://10.106.165.252/result";
 
     public static String SendPost(String pictureId, Integer result, String deviceId) {
         String msg = "";
