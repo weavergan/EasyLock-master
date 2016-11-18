@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <title>打地鼠</title>
+    <script type="text/javascript" src="js/main.js"></script>
+    <style>
+    #mouse{
+        z-index: 100;
+        position:relative;
+        top:20px;
+        animation:mymove 5s infinite;
+        -webkit-animation:mymove 1s infinite; /*Safari and Chrome*/
+    }
+
+    @keyframes mymove{
+        from {top:0px;}
+        to {top:20px;}
+    }
+
+    @-webkit-keyframes mymove /*Safari and Chrome*/
+    {
+        from {top:0px;}
+        to {top:20px;}
+    }
+    .hammerRight{
+        transform:scaleX(-1);
+    }
+    .hammerRightAf{
+        transform:scaleX(-1) translateY(40px) rotate(-60deg);
+        z-index:999
+    }
+    .hammerLeftAf{
+        transform:translateY(40px) rotate(-60deg);
+        z-index:999
+    }
+    #a{
+        position:relative;
+        left: 5px;
+    }
+    .container{
+        text-align: center;
+    }
+    </style>
+</head>
+<div class="container">
+    <div>
+        <!--<img src="./img/zjl.jpg" width="150" height="200"/>-->
+        <img src="./img/jxx.jpeg" width="200" height="300"/>
+    </div>
+    <div>
+        <div>
+            <span>是人</span>
+            <img class="hammerRight" id='hammerRight' src="./img/hammer.png"/>
+            <img class="hammer" id='hammerLeft' src="./img/hammer.png"/>
+            <span>是物</span>
+        </div>
+        <div id="a">
+            <img id='mouse' src="./img/mouseA.png" width="60" height="60"/>
+            <br/>
+            <img src="./img/hole.png" style=" z-index: 1;"/>
+        </div>
+    </div>
+</div>
+<script>
+    var hammerRight = document.getElementById('hammerRight');
+    hammerRight.onclick = function (){
+        this.className = 'hammerRightAf';
+        document.getElementById('mouse').src ="./img/mouseB.png"
+        setTimeout(function(){
+            document.getElementById('hammerRight').className = 'hammerRight';
+            document.getElementById('mouse').src ="./img/mouseA.png"
+        },400)
+        NotificationBind.showNotification('This is an Awesome notification')
+    }
+
+    var hammerLeft = document.getElementById('hammerLeft');
+    hammerLeft.onclick = function (){
+        this.className = 'hammerLeftAf';
+        document.getElementById('mouse').src ="./img/mouseB.png"
+        setTimeout(function(){
+            document.getElementById('hammerLeft').className = 'hammerLeft';
+            document.getElementById('mouse').src ="./img/mouseA.png"
+        },400)
+    }
+
+</script>
+</body>
+</html>
