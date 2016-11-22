@@ -33,7 +33,7 @@ public class MainActivity extends BaseActivity {
     private CheckBox lockSwitcher;
     private TextView switcherInfo;
     private CheckBox bootOnEnable;
-    private Button bgBtn;
+//    private Button bgBtn;
 
 
     @Override
@@ -46,7 +46,7 @@ public class MainActivity extends BaseActivity {
         lockSwitcher = (CheckBox) findView(R.id.lock_switcher);
         bootOnEnable = (CheckBox) findView(R.id.set_lock_onstart);
         switcherInfo = (TextView) findView(R.id.lock_switcher_info);
-        bgBtn = (Button) findView(R.id.set_lock_bg);
+//        bgBtn = (Button) findView(R.id.set_lock_bg);
 
         lockSwitcher.setChecked(LockService.running);
 
@@ -67,43 +67,43 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-        bgBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                settingPresenter.showBgChoice();
-            }
-        });
-
-        findView(R.id.set_lock_top_text).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                settingPresenter.setTopText();
-            }
-        });
-        findView(R.id.set_lock_patter).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                settingPresenter.setLockPatter();
-            }
-        });
-        findView(R.id.set_lock_item_color).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                settingPresenter.setLockItemColor();
-            }
-        });
-        findView(R.id.set_lock_text_color).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                settingPresenter.setLockTextColor();
-            }
-        });
-        findView(R.id.set_lock_intent_app).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, LockToAppActivity.class));
-            }
-        });
+//        bgBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                settingPresenter.showBgChoice();
+//            }
+//        });
+//
+//        findView(R.id.set_lock_top_text).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                settingPresenter.setTopText();
+//            }
+//        });
+//        findView(R.id.set_lock_patter).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                settingPresenter.setLockPatter();
+//            }
+//        });
+//        findView(R.id.set_lock_item_color).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                settingPresenter.setLockItemColor();
+//            }
+//        });
+//        findView(R.id.set_lock_text_color).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                settingPresenter.setLockTextColor();
+//            }
+//        });
+//        findView(R.id.set_lock_intent_app).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                startActivity(new Intent(MainActivity.this, LockToAppActivity.class));
+//            }
+//        });
         settingPresenter.start();
     }
 

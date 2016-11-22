@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="./lib/circular-slider.min.css" />
+    <link  rel="stylesheet" type="text/css" href="http://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="http://cdn.hcharts.cn/jquery/jquery-1.8.3.min.js"></script>
+    <script src="./lib/circular-slider.min.js"></script>
+    <style>
+    .container{
+        text-align: center;
+        background: url(./img/slide_bg.png);
+        background-size: contain;
+        width: 100%;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+    }
+    #time{
+        <!--margin-top: 80px;-->
+    }
+    #year{
+        display: block;
+        color: white;
+        font-size: 25px;
+        font-weight: 100;
+    }
+    #minute{
+        display: block;
+        color: white;
+        font-size: 40px;
+    }
+    #pic{
+        text-align: center;
+        background: url(./img/pic_wall.png);
+        background-size: contain;
+        width: 100%;
+        height: 55%;
+        background-position-x: center;
+        background-repeat: no-repeat;
+        background-position-y: 20px;
+    }
+    #pic img{
+        max-width: 60%;
+        height:45%;
+        position: relative;
+        top:60px
+    }
+    #pic div span{
+        position: relative;
+        top: 75px;
+        font-size: 25px;
+    }
+    #true{
+        text-align: center;
+        background: url(./img/true.png);
+        background-size: contain;
+        height: 310px;
+        background-position-x: center;
+        background-repeat: no-repeat;
+    }
+    #false{
+        text-align: center;
+        background: url(./img/false.png);
+        background-size: contain;
+        height: 310px;
+        background-position-x: center;
+        background-repeat: no-repeat;
+    }
+    #button{
+        text-align: center;
+        background: url(./img/button.png);
+        background-size: contain;
+        height: 310px;
+        background-position-x: center;
+        background-repeat: no-repeat;
+    }
+    .jcs{
+        border-color: #fff;
+        border-width: 1px;
+    }
+        .jcs-indicator{
+            width:40px;
+            height:40px;
+            background-color:#fff ;
+        }
+    .jcs-value{
+        border: 30px solid #fff;
+        background-color:transparent;
+        top: 72px;!important;
+        left: 76px;!important;
+    }
+    }
+
+    </style>
+</head>
+<body>
+<div class="container">
+     <div class="row" id='time'>
+         <div class="col-xs-12"><h1 id="year"></h1></div>
+         <div class="col-xs-12"><span id="minute"></span></div>
+     </div>
+    <div id="pic">
+        <img class="img-rounded" alt="Responsive image"/>
+        <div><span>这张图片是人物照吗？</span></div>
+    </div>
+    <div class="row" id='option'>
+        <div class="col-xs-4" id="true"></div>
+        <div class="col-xs-4" id="button"></div>
+        <!--<div class="col-xs-4"><div id="slider"></div></div>-->
+        <div class="col-xs-4" id="false"></div>
+    </div>
+
+</div>
+
+
+<script>
+    Date.prototype.Format = function(fmt)
+    { //author: meizz
+        var o = {
+            "M+" : this.getMonth()+1,                 //月份
+            "d+" : this.getDate(),                    //日
+            "h+" : this.getHours(),                   //小时
+            "m+" : this.getMinutes(),                 //分
+            "s+" : this.getSeconds(),                 //秒
+            "q+" : Math.floor((this.getMonth()+3)/3), //季度
+            "S"  : this.getMilliseconds()             //毫秒
+        };
+        if(/(y+)/.test(fmt))
+            fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));
+        for(var k in o)
+            if(new RegExp("("+ k +")").test(fmt))
+                fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
+        return fmt;
+    };
+
+    var time = new Date();
+    var timestr = time.getFullYear()+'年'+(time.getMonth()+1)+'月'+time.getDate()+'日';
+    $('#year').text(timestr)
+    var time2 = new Date().Format("hh:mm");
+    $('#minute').text(time2);
+
+    setInterval(function(){
+        var time2 = new Date().Format("hh:mm");
+        $('#minute').text(time2);
+    },1000)
+    var picInfo = {};
+    var url = 'http://10.106.165.252';
+    $(function(){
+        $.ajax({
+            type: 'GET',
+            url:url+'/fetch_new',
+            dataType:'jsonp',
+            data: '',
+            jsonp:'callback',
+            jsonpCallback:"jsonpCallback",
+            success:function(data){
+                console.log(data);
+                picInfo = data
+                showPic(picInfo)
+            },
+            error:function(data){
+                console.log('error');
+            },
+        });
+    });
+
+    function showPic(obj){
+        $('#pic img')[0].src = obj.url;
+        $('#pic div span').text(obj.text);
+    }
+    var slider = $('#slider').CircularSlider({
+        min : 0,
+        max: 359,
+        value : 0,
+        radius:150,
+//        innerCircleRatio:0.75,
+        handleDist:90,
+        touch: true,
+        animate: true,
+        formLabel : function(value, prefix, suffix) {
+            return '';
+        },
+        slide:function(ui,value) {
+  /*          if(value==90){
+                $('#false').css({
+                    'background':"url(./img/false_press.png)",
+                    'background-size':'contain',
+                    'background-repeat':'no-repeat'
+
+                });
+                setTimeout(function(){
+//                NotificationBind.showNotification(picInfo.id,0)
+                },400)
+            }
+            if(value==270){
+                $('#true').css({
+                    'background':"url(./img/true_press.png)",
+                    'background-size':'contain',
+                    'background-repeat':'no-repeat'
+
+                });
+                setTimeout(function(){
+//                NotificationBind.showNotification(picInfo.id,1)
+                },400)
+            }*/
+        },
+    });
+    $('#false').on('click',function(){
+        $('#false').css({
+            'background':"url(./img/false_press.png)",
+            'background-size':'contain',
+            'background-repeat':'no-repeat'
+
+        });
+        setTimeout(function(){
+                NotificationBind.showNotification(picInfo.id,'no')
+        },400)
+    });
+    $('#true').on('click',function() {
+        $('#true').css({
+            'background': "url(./img/true_press.png)",
+            'background-size': 'contain',
+            'background-repeat': 'no-repeat'
+
+        });
+        setTimeout(function () {
+                NotificationBind.showNotification(picInfo.id,'yes')
+        });
+    });
+    $('.jcs-value').css({
+        top:'60px',
+        left:'60px',
+        width: '180px',
+        height: '180px'
+    })
+
+
+</script>
+</body>
+</html>

@@ -24,9 +24,9 @@ import android.webkit.JavascriptInterface;
  * 锁频页面
  */
 
-public class LockActivity extends BaseActivity implements SettingPresenter.ConfigChange, LockViewManager.LockStatusListener {
+public class LockActivity extends BaseActivity implements SettingPresenter.ConfigChange, LockViewManager2.LockStatusListener {
 
-    private LockViewManager viewManager = null;
+    private LockViewManager2 viewManager = null;
 
     private static WebView webView = null;
 
@@ -52,14 +52,14 @@ public class LockActivity extends BaseActivity implements SettingPresenter.Confi
         webView.getSettings().setJavaScriptEnabled(true);//启用javascript支持
         //添加一个js交互接口，方便html布局文件中的javascript代码能与后台java代码直接交互访问
         webView.addJavascriptInterface(new NotificationBindObject(), "NotificationBind");//new类名，交互访问时使用的别名
-        // <body onload="javascript:Person.getPersonList()">
+//        webView.loadUrl("file:///android_asset/slide.html");//加载本地的html布局文件
         webView.loadUrl("file:///android_asset/index.html");//加载本地的html布局文件
 
 
-        viewManager = LockViewManager.getInstance(LockActivity.this);
-        viewManager.setLockStatusListener(this);
-        viewManager.setLockView(LayoutInflater.from(LockActivity.this).inflate(R.layout.view_lock,null));
-        viewManager.updateActivity(LockActivity.this);
+//        viewManager = LockViewManager2.getInstance(LockActivity.this);
+//        viewManager.setLockStatusListener(this);
+//        viewManager.setLockView(LayoutInflater.from(LockActivity.this).inflate(R.layout.view_lock2,null));
+//        viewManager.updateActivity(LockActivity.this);
 
         SettingPresenter.addConfigChangeListener(this);
     }
@@ -67,18 +67,19 @@ public class LockActivity extends BaseActivity implements SettingPresenter.Confi
     @Override
     protected void onStart() {
         super.onStart();
-        try {
-            viewManager.Lock();
-        } catch (NoLockStatusListenerException e) {
-            e.printStackTrace();
-            Show(e.getMessage());
-        }
+//        try {
+//            viewManager.Lock();
+//        } catch (NoLockStatusListenerException e) {
+//            e.printStackTrace();
+//            Show(e.getMessage());
+//        }
     }
 
     @Override
     protected void onDestroy() {
-        viewManager.updateActivity(LockActivity.this);
-        overridePendingTransition(R.anim.zoom_enter,R.anim.zoom_exit);
+//        viewManager.updateActivity(LockActivity.this);
+//        viewManager.unLock();
+//        overridePendingTransition(R.anim.zoom_enter,R.anim.zoom_exit);
         super.onDestroy();
 
     }
